@@ -93,10 +93,18 @@
                                     <div class="thumbnail" style="background-color: #428bca">
                                         <div class="caption" style="color: white">
                                             <h3>Browser Details</h3>
-                                            <p><small>Id: [[${fileInfo.browser.id}]]</small></p>
-                                            <p><small>Browser: [[${fileInfo.browser.name}]]</small></p>
-                                            <p><small>Type: [[${fileInfo.browser.type}]]</small></p>
-                                            <p><small>version: [[${fileInfo.browser.version}]]</small></p>
+
+                                            <ul class="list-group">
+
+                                                <li class="list-group-item list-group-item-info"> Id:
+                                                    <span class="pull-right"> [[${fileInfo.browser.id}]]</span></li>
+                                                <li class="list-group-item list-group-item-info"> Browser:
+                                                    <span class="pull-right">[[${fileInfo.browser.name}]]</span></li>
+                                                <li class="list-group-item list-group-item-info"> Version:
+                                                    <span class="pull-right">[[${fileInfo.browser.version}]]</span></li>
+                                                <li class="list-group-item list-group-item-info"> Type:
+                                                    <span class="pull-right">[[${fileInfo.browser.type}]]</span></li>
+                                            </ul>
                                         </div>
                                     </div>
                                 </div>
@@ -104,9 +112,16 @@
                                     <div class="thumbnail" style="background-color: #428bca">
                                         <div class="caption" style="color: white">
                                             <h3>Os & Ip</h3>
-                                            <p><small>IP: [[${fileInfo.ip}]]</small></p>
-                                            <p><small>OS: [[${fileInfo.browser.os}]]</small></p>
-                                            <p><small>Device: [[${fileInfo.browser.deviceType}]]</small></p>
+                                            <ul class="list-group">
+
+                                                <li class="list-group-item list-group-item-info"> IP:
+                                                    <span class="pull-right"> [[${fileInfo.ip}]]</span></li>
+                                                <li class="list-group-item list-group-item-info"> OS:
+                                                    <span class="pull-right">[[${fileInfo.browser.os}]]</span></li>
+                                                <li class="list-group-item list-group-item-info"> DEVICE:
+                                                    <span class="pull-right">[[${fileInfo.browser.deviceType}]]</span>
+                                                </li>
+                                            </ul>
                                         </div>
                                     </div>
                                 </div>
