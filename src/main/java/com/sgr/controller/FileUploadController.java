@@ -1,6 +1,8 @@
 package com.sgr.controller;
 
+import com.sgr.config.AppProp;
 import com.sgr.exception.StorageFileNotFoundException;
+import com.sgr.models.FileInfo;
 import com.sgr.service.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -30,12 +32,18 @@ public class FileUploadController {
 
     @GetMapping("/")
     public String listUploadedFiles(Model model) throws IOException {
+        storageService.loadAll().forEach(
+                path -> {
 
-        model.addAttribute("files", storageService.loadAll().map(
-                path -> MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
-                        "serveFile", path.getFileName().toString()).build().toUri().toString())
-                .collect(Collectors.toList()));
+                    String fileUrl = MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
+                            "serveFile", path.getFileName().toString()).build().toUri().toString();
+                    FileInfo fileInfo = AppProp.FileData.get(path.getFileName().toString());
+                    fileInfo.setFileUrl(fileUrl);
+                    AppProp.FileData.put(path.getFileName().toString(), fileInfo);
 
+                }
+        );
+        model.addAttribute("fileDataMap", AppProp.FileData);
         return "index";
     }
 
@@ -50,9 +58,9 @@ public class FileUploadController {
 
     @PostMapping("/")
     @ResponseBody
-    public Map<String, String> handleFileUpload(@RequestParam("file") MultipartFile file, String security) {
+    public Map<String, String> handleFileUpload(@RequestParam("file") MultipartFile file) {
         Map<String, String> model = new HashMap<>();
-        storageService.store(file, security, model);
+        storageService.store(file, model);
         return model;
     }
 

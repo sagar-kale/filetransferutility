@@ -1,8 +1,10 @@
 package com.sgr.service;
 
+import com.sgr.config.AppProp;
 import com.sgr.config.StorageProperties;
 import com.sgr.exception.StorageException;
 import com.sgr.exception.StorageFileNotFoundException;
+import com.sgr.models.FileInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -18,7 +20,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Date;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 
 @Service class FileSystemStorageService implements StorageService
@@ -30,20 +34,23 @@ import java.util.stream.Stream;
                 this.rootLocation = Paths.get(properties.getLocation());
         }
 
-        @Override public void store(MultipartFile file, String security, Map<String, String> model) {
+        @Override public void store(MultipartFile file, Map<String, String> model) {
                 String filename = StringUtils.cleanPath(file.getOriginalFilename());
                 try {
                         if (file.isEmpty()) {
                                 throw new StorageException("Failed to store empty file " + filename);
                         }
                         if (filename.contains("..")) {
-                                // This is a security check
                                 throw new StorageException("Cannot store file with relative path outside current directory " + filename);
                         }
                         try (InputStream inputStream = file.getInputStream()) {
                                 Files.copy(inputStream, this.rootLocation.resolve(filename), StandardCopyOption.REPLACE_EXISTING);
-
-                                model.put("message", "You successfully uploaded " + file.getOriginalFilename() + "!");
+                                FileInfo fileInfo=new FileInfo();
+                                fileInfo.setFileName(filename);
+                                fileInfo.setDownloads(0);
+                                fileInfo.setCreatedAt(new Date());
+                            AppProp.FileData.put(filename,fileInfo);
+                            model.put("message", "You successfully uploaded " + file.getOriginalFilename() + "!");
                                 model.put("isReplaced", "false");
 
                         }

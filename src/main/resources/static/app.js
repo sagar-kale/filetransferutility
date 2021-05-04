@@ -5,9 +5,7 @@ $(document).ready(function(){
 
         event.preventDefault();
         var file = document.getElementById('file');
-        var security = $('#security').val();
         var formData = new FormData(); // Currently empty
-        formData.append('security',security);
         formData.append('file',file.files[0]);
 
 
