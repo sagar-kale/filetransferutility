@@ -70,28 +70,43 @@
                             <div class="row">
                                 <div class="col-sm-6 col-md-4">
                                     <div class="thumbnail" style="background-color: #428bca">
-                                        <div class="caption" style="color: white">
-                                            <h3>Downloads</h3>
-                                            <p>[[${fileInfo.downloads}]]</p>
-                                            <p><a th:href="${fileInfo.fileUrl}" class="btn btn-success" role="button">Download File</a></p>
+                                        <div class="caption">
+                                            <h3>File Info</h3>
+                                            <ul class="list-group">
+
+                                                <li class="list-group-item list-group-item-info"> Created At:
+                                                    <span class="pull-right"> [[${fileInfo.createdAt}]]</span></li>
+                                                <li class="list-group-item list-group-item-info"> Last Downloaded:
+                                                    <span class="pull-right">[[${fileInfo.lastDownload}]]</span></li>
+                                                <li class="list-group-item list-group-item-info">
+                                                    <span class="badge">[[${fileInfo.downloads}]]</span>
+                                                    Downloads:
+                                                </li>
+                                            </ul>
+
+                                            <p><a th:href="${fileInfo.fileUrl}" class="btn btn-success" role="button">Download
+                                                File</a></p>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-sm-6 col-md-4">
                                     <div class="thumbnail" style="background-color: #428bca">
                                         <div class="caption" style="color: white">
-                                            <h3>Downloads</h3>
-                                            <p>[[${fileInfo.downloads}]]</p>
-                                            <p><a th:href="${fileInfo.fileUrl}" class="btn btn-success" role="button">Download File</a></p>
+                                            <h3>Browser Details</h3>
+                                            <p><small>Id: [[${fileInfo.browser.id}]]</small></p>
+                                            <p><small>Browser: [[${fileInfo.browser.name}]]</small></p>
+                                            <p><small>Type: [[${fileInfo.browser.type}]]</small></p>
+                                            <p><small>version: [[${fileInfo.browser.version}]]</small></p>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-sm-6 col-md-4">
                                     <div class="thumbnail" style="background-color: #428bca">
                                         <div class="caption" style="color: white">
-                                            <h3>Downloads</h3>
-                                            <p>[[${fileInfo.downloads}]]</p>
-                                            <p><a th:href="${fileInfo.fileUrl}" class="btn btn-success" role="button">Download File</a></p>
+                                            <h3>Os & Ip</h3>
+                                            <p><small>IP: [[${fileInfo.ip}]]</small></p>
+                                            <p><small>OS: [[${fileInfo.browser.os}]]</small></p>
+                                            <p><small>Device: [[${fileInfo.browser.deviceType}]]</small></p>
                                         </div>
                                     </div>
                                 </div>

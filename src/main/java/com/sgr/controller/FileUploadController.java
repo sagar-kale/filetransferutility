@@ -1,7 +1,9 @@
 package com.sgr.controller;
 
 import com.sgr.config.AppProp;
+import com.sgr.config.UserDetails;
 import com.sgr.exception.StorageFileNotFoundException;
+import com.sgr.models.BrowserDetails;
 import com.sgr.models.FileInfo;
 import com.sgr.service.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +16,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 
 @Controller
@@ -36,7 +39,7 @@ public class FileUploadController {
                 path -> {
 
                     String fileUrl = MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
-                            "serveFile", path.getFileName().toString()).build().toUri().toString();
+                            "serveFile", path.getFileName().toString(), null).build().toUri().toString();
                     FileInfo fileInfo = AppProp.FileData.get(path.getFileName().toString());
                     fileInfo.setFileUrl(fileUrl);
                     AppProp.FileData.put(path.getFileName().toString(), fileInfo);
@@ -49,7 +52,19 @@ public class FileUploadController {
 
     @GetMapping("/files/{filename:.+}")
     @ResponseBody
-    public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
+    public ResponseEntity<Resource> serveFile(@PathVariable String filename, HttpServletRequest request) {
+        if (null != request) {
+            FileInfo fileInfo = AppProp.FileData.get(filename);
+            if (null != fileInfo) {
+                BrowserDetails userAgent = UserDetails.getUserAgent(request);
+                String ip = UserDetails.getIp(request);
+                fileInfo.setIp(ip);
+                fileInfo.setBrowser(userAgent);
+                fileInfo.setLastDownload(new Date());
+                fileInfo.setDownloads(fileInfo.getDownloads() + 1);
+                AppProp.FileData.put(filename, fileInfo);
+            }
+        }
 
         Resource file = storageService.loadAsResource(filename);
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
@@ -58,9 +73,9 @@ public class FileUploadController {
 
     @PostMapping("/")
     @ResponseBody
-    public Map<String, String> handleFileUpload(@RequestParam("file") MultipartFile file) {
+    public Map<String, String> handleFileUpload(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
         Map<String, String> model = new HashMap<>();
-        storageService.store(file, model);
+        storageService.store(file, model, request);
         return model;
     }
 

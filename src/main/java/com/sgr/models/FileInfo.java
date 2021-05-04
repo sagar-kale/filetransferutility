@@ -7,7 +7,7 @@ public class FileInfo {
     private int downloads;
     private String ip;
     private String fileUrl;
-    private String browser;
+    private BrowserDetails browser;
     private Date lastDownload;
     private Date createdAt;
 
@@ -31,6 +31,13 @@ public class FileInfo {
         this.fileUrl = fileUrl;
     }
 
+    public BrowserDetails getBrowser() {
+        return browser;
+    }
+
+    public void setBrowser(BrowserDetails browser) {
+        this.browser = browser;
+    }
 
     public void setDownloads(int downloads) {
         this.downloads = downloads;
@@ -42,14 +49,6 @@ public class FileInfo {
 
     public void setIp(String ip) {
         this.ip = ip;
-    }
-
-    public String getBrowser() {
-        return browser;
-    }
-
-    public void setBrowser(String browser) {
-        this.browser = browser;
     }
 
     public Date getLastDownload() {
